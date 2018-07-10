@@ -7,6 +7,7 @@
 # importing Libraries
 #########################
 # import tkinter as tk        # Python 3: "t" lower-case
+
 from tkinter import Menu
 from tkinter import ttk, messagebox
 from tkinter import *
@@ -63,13 +64,18 @@ def login():
         logging.debug('username match found in data with name : {}'.format(d[Username][2]))
         if Pin == d[Username][5]:
             logging.debug('user entered correct pin')
+            username.delete(0, END)
+            pin.delete(0, END)
             messagebox.showinfo('Successfull', 'Welcome {} to atm service.'.format((d[Username][2]).upper()))
 
         else:
+            pin.delete(0, END)
             messagebox.showwarning('Unsuccessfull', 'Invalid PIN!')
             logging.warning('user entered incorrect pin')
 
     else:
+        username.delete(0, END)
+        pin.delete(0, END)
         logging.warning('no match found with username:{}'.format(Username))
         messagebox.showwarning('Unsuccessfull', 'Invalid Username! No match found')
 
@@ -109,7 +115,7 @@ instr = ttk.LabelFrame(tab2, text='This Tab will be containing all the Instructi
 
 # using the tkinter grid layout manager
 instr.grid(column=0, row=0, padx=8, pady=4)
-ttk.Label(instr, text="All The Instructions are as follows: \n 1. If you are reading this then it means that you have downloaded this file. \n 2. Install Python3 on your system if you haven't already. \n 3. Install tkinter module in order to run the GUI of this program \n 4. The default username is abc xyz \n 5. The Default password is 1234 \n 6. If you are having any issues than please report it so we can fix it!").grid(column=0, row=0, sticky='W')
+ttk.Label(instr, text="All The Instructions are as follows: \n 1. If you are reading this then it means that you have downloaded this file. \n 2. Install Python3 on your system if you haven't already. \n 3. Install tkinter module in order to run the GUI of this program \n 4. If you are having any issues than please report it so we can fix it!").grid(column=0, row=0, sticky='W')
 
 ttk.Label(tab1,text="Enter Username: ", font='none 12').grid(row=0, sticky="W")
 username = Entry(tab1)
@@ -126,7 +132,7 @@ Button(root, text='CREATE NEW ACCOUNT', bg='pale green', font='none 12 bold', co
 
 
 #Copyright label-----------------------------------------------------
-cp = Label(root, text="A Project by: Faizan Ahmad and Nauman Afsar         \t\t\t  {} Copyright 2018".format(chr(0xa9)), relief=SUNKEN, anchor=W, bg='LightCyan2')
+cp = Label(root, text="Copyright {} 2018 \tFaizan Ahmad & Nauman Afsar Joint Project".format(chr(0xa9)), relief=SUNKEN, anchor=W, bg='LightCyan2')
 cp.pack(fill=X)
 # -------------------------------------------------------------------------------------
 
