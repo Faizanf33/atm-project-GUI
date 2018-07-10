@@ -46,7 +46,7 @@ def next_window():
     Frame_2 = Frame(window)
     Frame_2.grid()
 
-    
+
     #------empty label----------
     Label(Frame_2, text='CREATE NEW PIN', font="none 12 bold").grid(row=0, rowspan=2, column=1, columnspan=2, sticky=EW)
     Label(Frame_2).grid(row=2, sticky=EW)
@@ -89,13 +89,13 @@ def next_window():
     Label(Frame_2).grid(row=12, sticky=EW)
     Label(Frame_2).grid(row=13, sticky=EW)
     Label(Frame_2).grid(row=14, sticky=EW)
-    
+
     logging.debug('creating buttons....')
     #----button for exit-----
     finish_bt = Button(Frame_2, text="FINISH", bg="pale green", fg="black", font="none 12", relief=GROOVE, padx=15, bd=5, command=finish)
     finish_bt.grid(row=15, column=3, sticky=W+S)
 
-    
+
     window.mainloop()
 
 
@@ -113,13 +113,19 @@ y_axis = (hs/2) - (h/2)
 window.geometry('%dx%d+%d+%d' % (w, h, x_axis, y_axis))
 window.resizable(width=False, height=False)
 
+def close():
+    window.quit()
+    window.destroy()
+    return
+
+
 def click(event=None):
     first, last, middle, father, CNIC = f_name.get(), l_name.get(), m_name.get(), ft_name.get(), cnic.get()
     global user
 
     Username, Acc_type = username.get(), acc_type.get()
 
-    if Acc_type == 1:
+    if Acc_type == 0:
         logging.info('user selected account type as Gold')
         Acc_type =  'Gold'
 
@@ -136,7 +142,7 @@ def click(event=None):
         logging.warn('user entered invalid username : {}'.format(Username))
         messagebox.showwarning('Failed', "Invalid username : {}. Please enter a unique username.".format(Username))
 
-    
+
     elif not Full_name:
         window.bell()
         logging.warn('user entered invalid name')
@@ -159,7 +165,7 @@ window.config(menu=my_menu)
 
 subMenu = Menu(my_menu)
 my_menu.add_cascade(label="File", menu=subMenu)
-subMenu.add_command(label='Exit', command=window.destroy)
+subMenu.add_command(label='Exit', command=close)
 
 helpMenu = Menu(my_menu)
 my_menu.add_cascade(label="Help", menu=helpMenu)
@@ -222,11 +228,7 @@ def limitSize(*args):
     value = limit.get()
     if len(value) > 13: limit.set(value[:13])
 
-def exit():
-    window.quit()
-    window.destroy()
-    return
-    
+
 limit = StringVar()
 limit.trace('w', limitSize)
 
@@ -255,10 +257,10 @@ next_bt = Button(Frame_1, text="NEXT", bg="pale green", fg="black", font="none 1
 next_bt.grid(row=14, column=2,sticky=E)
 
 #----button for exit-----
-exit_bt = Button(Frame_1, text="EXIT", bg='light grey', fg='black', font="none 12", relief=GROOVE, padx=12, bd=5, command=window.destroy)
+exit_bt = Button(Frame_1, text="EXIT", bg='light grey', fg='black', font="none 12", relief=GROOVE, padx=12, bd=5, command=close)
 exit_bt.grid(row=14, column=3, sticky=W)
 
-#------empty label----------
+#------empty label---------
 Label(Frame_1).grid(row=15, sticky=EW)
 
 window.mainloop()
