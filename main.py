@@ -171,7 +171,7 @@ def new_account(event=None):
     root.withdraw()
     window.title("NEW ACCOUNT")
 
-    w = 400
+    w = 450
     h = 400
     window.protocol('WM_DELETE_WINDOW',exit) # if windows default cross button is pressed
     ws = window.winfo_screenwidth()
@@ -404,7 +404,7 @@ Button(root, text='CREATE NEW ACCOUNT', bg='pale green', font='Jokerman 12', com
 
 
 #Copyright label-----------------------------------------------------
-cp = Label(root, text="Copyright {} 2018 \tFaizan Ahmad & Nauman Afsar Joint Project".format(chr(0xa9)), relief=SUNKEN, anchor=W, bg='LightCyan2', font=("Script", 14, 'bold'))
+cp = Label(root, text="Copyright {} 2018 \tFaizan Ahmad & Nauman Afsar Joint Project".format(chr(0xa9)), relief=SUNKEN, anchor=W, bg='LightCyan2')
 cp.pack(fill=X)
 
 root.mainloop()
