@@ -26,7 +26,8 @@ class NewAccount:
 
                     if self.middle_name.isalpha():
                         logging.debug("name is cheked, returning full name")
-                        return ("{} {} {}".format(self.first_name, self.middle_name, self.last_name))
+                        self.fullname = self.first_name+" "+self.middle_name+" "+self.last_name
+                        return True
 
                     else:
                         logging.warning("middle name invalid : '{}'".format(self.middle_name))
@@ -34,7 +35,8 @@ class NewAccount:
 
                 else:
                     logging.info("return full name with no middle name")
-                    return ("{} {}".format(self.first_name, self.last_name))
+                    self.fullname = self.first_name+" "+self.last_name
+                    return True
 
             else:
                 logging.warning("last name invalid : '{}'".format(self.last_name))
@@ -45,11 +47,11 @@ class NewAccount:
             return False
 
     def get_account_no(self):
-        name = self.full_name()
+        name = self.fullname
         if name:
             logging.info("creating account number using name :{}".format(name))
-            account_no = account_no_gen(name)
-            return account_no
+            self.account_no = account_no_gen(name)
+            return True
 
         else:
             logging.info('account number could not be created...')
@@ -65,3 +67,9 @@ class NewAccount:
         else:
             logging.warning("invalid CNIC : {}".format(self.cnic))
             return False
+
+
+#new = NewAccount("Faizan", "Ahmad", "Muhammad Siddique", "3630263804095", "faizanf33", "Gold")
+#new.full_name()
+#print(new.fullname)
+#print(new.get_account_no())
