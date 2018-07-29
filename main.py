@@ -23,6 +23,8 @@ def exit():
     if msg == "yes":
         root.deiconify()   #makes the root window visible again
         window.destroy()
+        logging.info('exiting window')
+
     else:
         logging.info('window still running')
 
