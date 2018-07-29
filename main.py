@@ -7,7 +7,6 @@
 # importing Libraries
 #########################
 # import tkinter as tk        # Python 3: "t" lower-case
-
 from tkinter import *
 from tkinter import ttk,messagebox
 import logging, os, csv
@@ -20,9 +19,12 @@ from Data.encrypt import rot13
 ########################
 
 def exit():
-    root.deiconify()   #makes the root window visible again
-    window.destroy()
-
+    msg = messagebox.askquestion("CONFIRM","ARE YOU SURE YOU WANT TO EXIT?", icon='warning')
+    if msg == "yes":
+        root.deiconify()   #makes the root window visible again
+        window.destroy()
+    else:
+        logging.info('window still running')
 
 def new_account(event=None):
 
@@ -35,8 +37,8 @@ def new_account(event=None):
     def data_entry(Pin):
         filename = os.path.join('Data', 'userdata.csv')
         with open(filename, 'a') as data_file:
-            fathername, name = rot13(user.father_name.lower()), rot13(user.full_name().lower())
-            new = [user.username, user.get_account_no(), user.acc_type, name, fathername, user.cnic, Pin,  user.balance, 'NEW']
+            fathername, name = rot13(user.father_name.lower()), rot13(user.fullname.lower())
+            new = [user.username, user.account_no, user.acc_type, name, fathername, user.cnic, Pin,  user.balance, 'NEW']
             csv.writer(data_file).writerow(new)
             logging.debug('writing data in file')
             data_file.close()
@@ -53,7 +55,7 @@ def new_account(event=None):
                 logging.info('pin matched successfully')
                 window.bell()
                 logging.info('account no generated successfully')
-                messagebox.showinfo('Confirmation', "Dear {}! Your account is created successfully. Your account number is {}.".format(user.full_name(), user.get_account_no()))
+                messagebox.showinfo('Confirmation', "Dear {}! Your account is created successfully. Your account number is {}.".format(user.fullname, user.account_no))
                 data_entry(Pin)
                 window.destroy()
                 root.deiconify()
@@ -69,7 +71,7 @@ def new_account(event=None):
         Frame_2 = Frame(window)
         Frame_2.grid()
         #------empty label----------
-        Label(Frame_2, text='CREATE NEW PIN', font="none 12 bold").grid(row=0, rowspan=2, column=1, columnspan=2, sticky=EW)
+        Label(Frame_2, text='CREATE NEW PIN', font=("Microsoft Himalaya", 12, "bold")).grid(row=0, rowspan=2, column=1, columnspan=2, sticky=EW)
         Label(Frame_2).grid(row=2, sticky=EW)
         Label(Frame_2).grid(row=3, sticky=EW)
         Label(Frame_2).grid(row=4, sticky=EW)
@@ -119,7 +121,7 @@ def new_account(event=None):
 
         logging.debug('creating buttons....')
         #----button for exit-----
-        finish_bt = Button(Frame_2, text="FINISH", bg="pale green", fg="black", font="none 12", relief=GROOVE, padx=15, bd=5, command=finish)
+        finish_bt = Button(Frame_2, text="FINISH", bg="pale green", fg="black", font="Jokerman 12", relief=GROOVE, padx=12, bd=2, command=finish)
         finish_bt.grid(row=15, column=3, sticky=W+S)
 
     def click(event=None):
@@ -140,13 +142,7 @@ def new_account(event=None):
         user = NewAccount(first, last, father, CNIC, Username, Acc_type, middle)
         Full_name, CNIC = user.full_name(), user.cnic_check()
 
-        if (Username == " ") or (Username.lower() == first.lower()) or (Username.lower() == last.lower()) or (Username.lower() == father.lower()):
-            window.bell()
-            logging.warn('user entered invalid username : {}'.format(Username))
-            messagebox.showwarning('Failed', "Invalid username : {}. Please enter a unique username.".format(Username))
-
-
-        elif not Full_name:
+        if not Full_name:
             window.bell()
             logging.warn('user entered invalid name')
             messagebox.showwarning('Failed', "Invalid Name!")
@@ -156,7 +152,13 @@ def new_account(event=None):
             logging.warn('user entered invalid CNIC : {}'.format(CNIC))
             messagebox.showwarning('Failed', "Invalid CNIC Number!")
 
+        elif (Username == " ") or (Username.lower() == first.lower()) or (Username.lower() == last.lower()) or (Username.lower() == father.lower()):
+            window.bell()
+            logging.warn('user entered invalid username : {}'.format(Username))
+            messagebox.showwarning('Failed', "Invalid username : {}. Please enter a unique username.".format(Username))
+
         else:
+            user.get_account_no()
             logging.info('user entered correct information and now prompting user for pin...')
 
             Frame_1.destroy()
@@ -167,7 +169,8 @@ def new_account(event=None):
     global window
     window = Toplevel(root)
     root.withdraw()
-    window.title("Create New Account")
+    window.title("NEW ACCOUNT")
+
     w = 400
     h = 400
     window.protocol('WM_DELETE_WINDOW',exit) # if windows default cross button is pressed
@@ -178,6 +181,10 @@ def new_account(event=None):
 
     window.geometry('%dx%d+%d+%d' % (w, h, x_axis, y_axis))
     window.resizable(width=False, height=False)
+    try:
+        window.iconbitmap(icon)
+    except:
+        pass
 
     #-----creating menus-----
     my_menu = Menu(window)
@@ -200,7 +207,7 @@ def new_account(event=None):
     Frame_1.grid()
 
     #------empty label----------
-    Label(Frame_1, text='CREATE NEW ACCOUNT').grid(row=0, column=2, sticky=EW)
+    Label(Frame_1, text='CREATE NEW ACCOUNT', font=("Microsoft Himalaya", 12, "bold")).grid(row=0, column=2, sticky=EW)
 
     #----label for name------
     Label(Frame_1, text="First Name : ", font="none 12 bold").grid(row=1, column=0, sticky=W)
@@ -250,7 +257,7 @@ def new_account(event=None):
     limit.trace('w', limitSize)
 
     #---entry for cnic----
-    cnic = Entry(Frame_1, bg="white", width=16, font="12", textvariable=limit)
+    cnic = Entry(Frame_1, validate="key", bg="white", width=16, font="12", textvariable=limit)
     cnic.grid(row=7, column=2, sticky=W)
 
     #-----entry for username-----
@@ -270,11 +277,11 @@ def new_account(event=None):
     Label(Frame_1).grid(row=13, sticky=EW)
 
     #----button for next-----
-    next_bt = Button(Frame_1, text="NEXT", bg="pale green", fg="black", font="none 12", relief=GROOVE, padx=12, bd=5, command=click)
+    next_bt = Button(Frame_1, text="NEXT", bg="pale green", fg="black", font="Jokerman 12", relief=GROOVE, padx=12, bd=2, command=click)
     next_bt.grid(row=14, column=2,sticky=E)
 
     #----button for exit-----
-    exit_bt = Button(Frame_1, text="EXIT", bg='light grey', fg='black', font="none 12", relief=GROOVE, padx=12, bd=5, command=exit)
+    exit_bt = Button(Frame_1, text="EXIT", bg='light grey', fg='black', font="Jokerman 12", relief=GROOVE, padx=12, bd=2, command=exit)
     exit_bt.grid(row=14, column=3, sticky=W)
 
     #------empty label----------
@@ -322,6 +329,9 @@ def windows_size():
 
 root = Tk()
 root.title("ATM Project")
+
+icon = os.path.join('Data', 'icon.ico')
+
 w, h = 500, 400
 #to open window in the centre of screen
 ws = root.winfo_screenwidth()
@@ -332,6 +342,10 @@ y_axis = (hs/2) - (h/2)
 root.geometry('%dx%d+%d+%d' % (w, h, x_axis, y_axis))
 # disable resizing the GUI
 root.resizable(0,0)
+try:
+    root.iconbitmap(icon)
+except:
+    pass
 
 # Menu Bar
 menuBar = Menu()
@@ -367,22 +381,30 @@ instr = ttk.LabelFrame(tab2, text='This Tab will be containing all the Instructi
 instr.grid(column=0, row=0, padx=8, pady=4)
 ttk.Label(instr, text="All The Instructions are as follows: \n 1. If you are reading this then it means that you have downloaded this file. \n 2. Install Python3 on your system if you haven't already. \n 3. Install tkinter module in order to run the GUI of this program \n 4. If you are having any issues than please report it so we can fix it!").grid(column=0, row=0, sticky='W')
 
-ttk.Label(tab1,text="Enter Username: ", font='none 12').grid(row=0, sticky="W")
-username = Entry(tab1)
-username.grid(row=0, column=2)
+ttk.Label(tab1,text="Enter Username: ", font=("Palatino Linotype", 12, "bold")).grid(row=0, sticky="W")
+username = Entry(tab1, font='none')
+username.grid(row=0, column=2, padx=1, pady=2, ipadx=2, ipady=2)
 bullet = "\u2022"
-ttk.Label(tab1, text="Enter PIN: ", font='none 12').grid(row=1, sticky="W")
-pin = Entry(tab1, show=bullet)
-pin.grid(row=1, column=2)
+ttk.Label(tab1, text="Enter PIN: ", font=("Palatino Linotype", 12, "bold")).grid(row=1, sticky="W")
+
+def LimitPin(*arg):
+    value = PinLimit.get()
+    if len(value) > 4: PinLimit.set(value[:4])
+
+PinLimit = StringVar()
+PinLimit.trace('w', LimitPin)
+
+pin = Entry(tab1, show=bullet, font='none', textvariable=PinLimit)
+pin.grid(row=1, column=2, padx=1, pady=2, ipadx=2, ipady=2)
 # ---------------------------------------------------------------
 
 #Add buttons---------------------------
-Button(root, text='LOGIN', bg='deep sky blue', font='none 12 bold', command=login).pack(side='top', padx=4, pady=4, fill='both')
-Button(root, text='CREATE NEW ACCOUNT', bg='pale green', font='none 12 bold', command=new_account).pack(padx=4, pady=4, fill='both')
+Button(root, text='LOGIN', bg='deep sky blue', font='Jokerman 12', command=login).pack(side='top', padx=4, pady=4, fill='both')
+Button(root, text='CREATE NEW ACCOUNT', bg='pale green', font='Jokerman 12', command=new_account).pack(padx=4, pady=4, fill='both')
 
 
 #Copyright label-----------------------------------------------------
-cp = Label(root, text="Copyright {} 2018 \tFaizan Ahmad & Nauman Afsar Joint Project".format(chr(0xa9)), relief=SUNKEN, anchor=W, bg='LightCyan2')
+cp = Label(root, text="Copyright {} 2018 \tFaizan Ahmad & Nauman Afsar Joint Project".format(chr(0xa9)), relief=SUNKEN, anchor=W, bg='LightCyan2', font=("Script", 14, 'bold'))
 cp.pack(fill=X)
 
 root.mainloop()
