@@ -183,7 +183,9 @@ def new_account(event=None):
 
     window.geometry('%dx%d+%d+%d' % (w, h, x_axis, y_axis))
     window.resizable(width=False, height=False)
+    icon = os.path.join('Data', 'icon.ico')
     try:
+
         window.iconbitmap(icon)
         imgicon = PhotoImage(file=icon)
         window.tk.call('wm', 'iconphoto', window._w, imgicon)
@@ -425,7 +427,7 @@ Button(root, text='CREATE NEW ACCOUNT', bg='pale green', font='Jokerman 12', com
 
 
 #Copyright label-----------------------------------------------------
-cp = Label(root, text="Copyright {} 2018 \tFaizan Ahmad & Nauman Afsar Joint Project".format(chr(0xa9)), relief=SUNKEN, anchor=W, bg='LightCyan2')
+cp = Label(root, text=" Faizan Ahmad & Nauman Afsar Joint Project {} 2018".format(chr(0xa9)), relief=SUNKEN, anchor=W, bg='LightCyan2')
 cp.pack(fill=X)
 
 root.mainloop()
