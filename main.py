@@ -9,7 +9,7 @@
 # import tkinter as tk        # Python 3: "t" lower-case
 from tkinter import *
 from tkinter import ttk,messagebox
-import logging, os, csv
+import tkinter, logging, os, csv
 from Data.data import data
 from Data.new_acc_class import NewAccount
 from Data.encrypt import rot13
@@ -185,7 +185,16 @@ def new_account(event=None):
     window.resizable(width=False, height=False)
     try:
         window.iconbitmap(icon)
-    except:
+        imgicon = PhotoImage(file=icon)
+        window.tk.call('wm', 'iconphoto', window._w, imgicon)
+
+    except Exception as err:
+        logging.warning(err)
+        icon = os.path.join('Data', 'icon.gif')
+        imgicon = PhotoImage(file=icon)
+        window.tk.call('wm', 'iconphoto', window._w, imgicon)
+
+    finally:
         pass
 
     #-----creating menus-----
@@ -344,9 +353,19 @@ y_axis = (hs/2) - (h/2)
 root.geometry('%dx%d+%d+%d' % (w, h, x_axis, y_axis))
 # disable resizing the GUI
 root.resizable(0,0)
+
 try:
     root.iconbitmap(icon)
-except:
+    imgicon = PhotoImage(file=icon)
+    root.tk.call('wm', 'iconphoto', root._w, imgicon)
+
+except Exception as err:
+    logging.warning(err)
+    icon = os.path.join('Data', 'icon.gif')
+    imgicon = PhotoImage(file=icon)
+    root.tk.call('wm', 'iconphoto', root._w, imgicon)
+
+finally:
     pass
 
 # Menu Bar
