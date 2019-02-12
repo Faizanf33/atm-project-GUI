@@ -67,9 +67,3 @@ class NewAccount:
         else:
             logging.warning("invalid CNIC : {}".format(self.cnic))
             return False
-
-
-#new = NewAccount("Faizan", "Ahmad", "Muhammad Siddique", "3630263804095", "faizanf33", "Gold")
-#new.full_name()
-#print(new.fullname)
-#print(new.get_account_no())
